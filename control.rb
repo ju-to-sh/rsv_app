@@ -65,7 +65,7 @@ class Control
     month = valid_month
 
     printf "予約日(DD):"
-    day = valid_day
+    day = valid_day(year, month)
 
     printf "予約時間(時 HH):"
     hour = valid_hour
@@ -238,12 +238,35 @@ class Control
     month
   end
 
-  def valid_day
+  def valid_day(year, month)
     day = gets.chomp.to_i
-    until 0 < day && day <= 31
-      puts "1~31を入力してください"
-      printf "予約日(DD):"
-      day = gets.chomp.to_i
+    case month
+    when 1, 3, 5, 7, 8, 10, 12
+      until 0 < day && day <= 31
+        puts "1~31を入力してください"
+        printf "予約日(DD):"
+        day = gets.chomp.to_i
+      end
+    when 2
+      if Date.new(year).leap?
+        until 0 < day && day <= 29
+          puts "1~29を入力してください"
+          printf "予約日(DD):"
+          day = gets.chomp.to_i
+        end
+      else
+        until 0 < day && day <= 28
+          puts "1~28を入力してください"
+          printf "予約日(DD):"
+          day = gets.chomp.to_i
+        end
+      end
+    when 4, 6, 9, 11
+      until 0 < day && day <= 30
+        puts "1~30を入力してください"
+        printf "予約日(DD):"
+        day = gets.chomp.to_i
+      end
     end
     day
   end
