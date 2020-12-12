@@ -30,10 +30,7 @@ class Control
 
   def index
     if @reservations.empty?
-      puts <<~TEXT
-
-             登録された予約はありません
-           TEXT
+      no_reservation_message
     else
       @reservations.each do |reservation|
         puts <<~TEXT
@@ -92,10 +89,7 @@ class Control
     reservation = find_reservation_id(index_num)
 
     if reservation.nil?
-      puts <<~TEXT
-
-             登録された予約はありません
-           TEXT
+      no_reservation_message
     else
       puts <<~TEXT
 
@@ -118,10 +112,7 @@ class Control
     index_num = gets.chomp.to_i
 
     if @reservations.empty?
-      puts <<~TEXT
-
-             登録された予約はありません
-           TEXT
+      no_reservation_message
     else
       puts <<~TEXT
 
@@ -132,16 +123,23 @@ class Control
       @user_name = gets.chomp
 
       printf "予約年(YYYY):"
-      year = gets.chomp.to_i
+      year = valid_year
+
       printf "予約月(MM):"
-      month = gets.chomp.to_i
+      month = valid_month
+
       printf "予約日(DD):"
-      day = gets.chomp.to_i
+      day = valid_day(year, month)
+
       printf "予約時間(時 HH):"
-      hour = gets.chomp.to_i
+      hour = valid_hour
+
       printf "予約時間(分 MM):"
-      minutes = gets.chomp.to_i
+      minutes = valid_minutes
+
       @datetime = DateTime.new(year, month, day, hour, minutes).strftime("%Y年 %m月%d日 %H:%M")
+      printf "予約内容:"
+      @contents = gets.chomp
 
       printf "予約内容:"
       @contents = gets.chomp
@@ -167,10 +165,7 @@ class Control
     reservation = find_reservation_id(index_num)
 
     if reservation.nil?
-      puts <<~TEXT
-
-             登録された予約はありません
-           TEXT
+      no_reservation_message
     else
       puts <<~TEXT
 
@@ -239,34 +234,22 @@ class Control
   end
 
   def valid_day(year, month)
-    day = gets.chomp.to_i
+    initial_day = gets.chomp.to_i
     case month
     when 1, 3, 5, 7, 8, 10, 12
-      until 0 < day && day <= 31
-        puts "1~31を入力してください"
-        printf "予約日(DD):"
-        day = gets.chomp.to_i
-      end
+      days_of_month = 31
+      day = reenter_of_day(initial_day, days_of_month)
     when 2
       if Date.new(year).leap?
-        until 0 < day && day <= 29
-          puts "1~29を入力してください"
-          printf "予約日(DD):"
-          day = gets.chomp.to_i
-        end
+        days_of_month = 29
+        day = reenter_of_day(initial_day, days_of_month)
       else
-        until 0 < day && day <= 28
-          puts "1~28を入力してください"
-          printf "予約日(DD):"
-          day = gets.chomp.to_i
-        end
+        days_of_month = 28
+        day = reenter_of_day(initial_day, days_of_month)
       end
     when 4, 6, 9, 11
-      until 0 < day && day <= 30
-        puts "1~30を入力してください"
-        printf "予約日(DD):"
-        day = gets.chomp.to_i
-      end
+      days_of_month = 30
+      day = reenter_of_day(initial_day, days_of_month)
     end
     day
   end
@@ -295,5 +278,22 @@ class Control
     @reservations.find do |reservation|
       reservation.id == index_num
     end
+  end
+
+  def no_reservation_message
+    puts <<~TEXT
+
+           登録された予約はありません
+
+         TEXT
+  end
+
+  def reenter_of_day(day, days_of_month)
+    until 0 < day && day <= days_of_month
+      puts "1~#{days_of_month}を入力してください"
+      printf "予約日(DD):"
+      day = gets.chomp.to_i
+    end
+    day
   end
 end
