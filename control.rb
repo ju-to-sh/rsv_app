@@ -29,9 +29,7 @@ class Control
   end
 
   def index
-    if @reservations.empty?
-      no_reservation_message
-    else
+    if !@reservations.empty?
       @reservations.each do |reservation|
         puts <<~TEXT
 
@@ -42,6 +40,8 @@ class Control
 
              TEXT
       end
+    else
+      no_reservation_message
     end
   end
 
@@ -53,7 +53,7 @@ class Control
 
          TEXT
     printf "予約者名:"
-    @user_name = gets.chomp
+    user_name = gets.chomp
 
     printf "予約年(YYYY):"
     year = valid_year
@@ -70,13 +70,13 @@ class Control
     printf "予約時間(分 MM):"
     minutes = valid_minutes
 
-    @datetime = DateTime.new(year, month, day, hour, minutes).strftime("%Y年 %m月%d日 %H:%M")
+    datetime = DateTime.new(year, month, day, hour, minutes).strftime("%Y年 %m月%d日 %H:%M")
     printf "予約内容:"
-    @contents = gets.chomp
+    contents = gets.chomp
 
-    @created_at = Date.today.strftime("%Y年 %m月%d日")
+    created_at = Date.today.strftime("%Y年 %m月%d日")
 
-    @reservations << Reservation.new(@id, @user_name, @datetime, @contents, @created_at)
+    @reservations << Reservation.new(@id, user_name, datetime, contents, created_at)
   end
 
   def show
@@ -88,9 +88,7 @@ class Control
     index_num = gets.chomp.to_i
     reservation = find_reservation_id(index_num)
 
-    if reservation.nil?
-      no_reservation_message
-    else
+    if !reservation.nil?
       puts <<~TEXT
 
              【予約詳細】
@@ -100,6 +98,8 @@ class Control
               登録日:#{reservation.created_at}
 
            TEXT
+    else
+      no_reservation_message
     end
   end
 
@@ -111,16 +111,14 @@ class Control
     printf "予約No."
     index_num = gets.chomp.to_i
 
-    if @reservations.empty?
-      no_reservation_message
-    else
+    if !@reservations.empty?
       puts <<~TEXT
 
              予約を登録してください
 
            TEXT
       printf "予約者名:"
-      @user_name = gets.chomp
+      user_name = gets.chomp
 
       printf "予約年(YYYY):"
       year = valid_year
@@ -137,21 +135,20 @@ class Control
       printf "予約時間(分 MM):"
       minutes = valid_minutes
 
-      @datetime = DateTime.new(year, month, day, hour, minutes).strftime("%Y年 %m月%d日 %H:%M")
+      datetime = DateTime.new(year, month, day, hour, minutes).strftime("%Y年 %m月%d日 %H:%M")
       printf "予約内容:"
-      @contents = gets.chomp
+      contents = gets.chomp
 
-      printf "予約内容:"
-      @contents = gets.chomp
-
-      @created_at = Date.today.strftime("%Y年 %m月%d日")
+      created_at = Date.today.strftime("%Y年 %m月%d日")
 
       reservation = find_reservation_id(index_num)
 
-      reservation.user_name = @user_name
-      reservation.datetime = @datetime
-      reservation.contents = @contents
-      reservation.created_at = @created_at
+      reservation.user_name = user_name
+      reservation.datetime = datetime
+      reservation.contents = contents
+      reservation.created_at = created_at
+    else
+      no_reservation_message
     end
   end
 
@@ -164,9 +161,7 @@ class Control
     index_num = gets.chomp.to_i
     reservation = find_reservation_id(index_num)
 
-    if reservation.nil?
-      no_reservation_message
-    else
+    if !reservation.nil?
       puts <<~TEXT
 
              以下の予約を削除しますか？
@@ -204,6 +199,8 @@ class Control
                TEXT
         end
       end
+    else
+      no_reservation_message
     end
   end
 
@@ -235,23 +232,8 @@ class Control
 
   def valid_day(year, month)
     initial_day = gets.chomp.to_i
-    case month
-    when 1, 3, 5, 7, 8, 10, 12
-      days_of_month = 31
-      day = reenter_of_day(initial_day, days_of_month)
-    when 2
-      if Date.new(year).leap?
-        days_of_month = 29
-        day = reenter_of_day(initial_day, days_of_month)
-      else
-        days_of_month = 28
-        day = reenter_of_day(initial_day, days_of_month)
-      end
-    when 4, 6, 9, 11
-      days_of_month = 30
-      day = reenter_of_day(initial_day, days_of_month)
-    end
-    day
+    days_of_month = Date.new(year, month, -1).mday
+    day = reenter_of_day(initial_day, days_of_month)
   end
 
   def valid_hour
