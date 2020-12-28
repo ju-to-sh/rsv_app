@@ -55,7 +55,7 @@ class Control
 
          TEXT
     printf "予約者名:"
-    user_name = gets.chomp
+    user_name = Reservation.valid_name
 
     printf "予約年(YYYY):"
     year = Reservation.valid_year
@@ -74,7 +74,7 @@ class Control
 
     datetime = DateTime.new(year, month, day, hour, minutes).strftime("%Y年 %m月%d日 %H:%M")
     printf "予約内容:"
-    contents = gets.chomp
+    contents = Reservation.valid_contents
 
     created_at = Date.today.strftime("%Y年 %m月%d日")
 
@@ -120,7 +120,7 @@ class Control
 
            TEXT
       printf "予約者名:"
-      user_name = gets.chomp
+      user_name = Reservation.valid_name
 
       printf "予約年(YYYY):"
       year = Reservation.valid_year
@@ -139,7 +139,7 @@ class Control
 
       datetime = DateTime.new(year, month, day, hour, minutes).strftime("%Y年 %m月%d日 %H:%M")
       printf "予約内容:"
-      contents = gets.chomp
+      contents = Reservation.valid_contents
 
       created_at = Date.today.strftime("%Y年 %m月%d日")
 

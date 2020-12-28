@@ -9,6 +9,16 @@ class Reservation
     @created_at = created_at
   end
 
+  def self.valid_name
+    name = gets.chomp.strip
+    while name == ""
+      puts "無効な名前です。もう一度入力してください"
+      printf "予約者名:"
+      name = gets.chomp.strip
+    end
+    name
+  end
+
   def self.valid_year
     year = gets.chomp.to_i
     while year < Date.today.year
@@ -53,6 +63,16 @@ class Reservation
       minutes = gets.chomp.to_i
     end
     minutes
+  end
+
+  def self.valid_contents
+    contents = gets.chomp.strip
+    while contents == ""
+      puts "無効な予約内容です。もう一度入力してください"
+      printf "予約内容:"
+      contents = gets.chomp.strip
+    end
+    contents
   end
 
   def self.reenter_of_day(day, days_of_month)

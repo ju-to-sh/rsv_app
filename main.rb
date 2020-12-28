@@ -1,7 +1,6 @@
 require "./reservation"
 require "./control"
 require "date"
-require "pry"
 
 INDEX = 1
 CREATE = 2
