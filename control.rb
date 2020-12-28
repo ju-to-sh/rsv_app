@@ -1,3 +1,5 @@
+require "./reservation"
+
 class Control
   attr_accessor :reservations
 
@@ -56,19 +58,19 @@ class Control
     user_name = gets.chomp
 
     printf "予約年(YYYY):"
-    year = valid_year
+    year = Reservation.valid_year
 
     printf "予約月(MM):"
-    month = valid_month
+    month = Reservation.valid_month
 
     printf "予約日(DD):"
-    day = valid_day(year, month)
+    day = Reservation.valid_day(year, month)
 
     printf "予約時間(時 HH):"
-    hour = valid_hour
+    hour = Reservation.valid_hour
 
     printf "予約時間(分 MM):"
-    minutes = valid_minutes
+    minutes = Reservation.valid_minutes
 
     datetime = DateTime.new(year, month, day, hour, minutes).strftime("%Y年 %m月%d日 %H:%M")
     printf "予約内容:"
@@ -121,19 +123,19 @@ class Control
       user_name = gets.chomp
 
       printf "予約年(YYYY):"
-      year = valid_year
+      year = Reservation.valid_year
 
       printf "予約月(MM):"
-      month = valid_month
+      month = Reservation.valid_month
 
       printf "予約日(DD):"
-      day = valid_day(year, month)
+      day = Reservation.valid_day(year, month)
 
       printf "予約時間(時 HH):"
-      hour = valid_hour
+      hour = Reservation.valid_hour
 
       printf "予約時間(分 MM):"
-      minutes = valid_minutes
+      minutes = Reservation.valid_minutes
 
       datetime = DateTime.new(year, month, day, hour, minutes).strftime("%Y年 %m月%d日 %H:%M")
       printf "予約内容:"
@@ -210,52 +212,6 @@ class Control
 
   private
 
-  def valid_year
-    year = gets.chomp.to_i
-    while year < Date.today.year
-      puts "予約年が過ぎています。もう一度入力してください"
-      printf "予約年(YYYY):"
-      year = gets.chomp.to_i
-    end
-    year
-  end
-
-  def valid_month
-    month = gets.chomp.to_i
-    until 0 < month && month <= 12
-      puts "1~12を入力してください"
-      printf "予約月(MM):"
-      month = gets.chomp.to_i
-    end
-    month
-  end
-
-  def valid_day(year, month)
-    initial_day = gets.chomp.to_i
-    days_of_month = Date.new(year, month, -1).mday
-    day = reenter_of_day(initial_day, days_of_month)
-  end
-
-  def valid_hour
-    hour = gets.chomp.to_i
-    until 0 <= hour && hour <= 23
-      puts "0~23を入力してください"
-      printf "予約時間(時 HH):"
-      hour = gets.chomp.to_i
-    end
-    hour
-  end
-
-  def valid_minutes
-    minutes = gets.chomp.to_i
-    until minutes == 0 || minutes == 30
-      puts "0もしくは30を入力してください"
-      printf "予約時間(分 MM):"
-      minutes = gets.chomp.to_i
-    end
-    minutes
-  end
-
   def find_reservation_id(index_num)
     @reservations.find do |reservation|
       reservation.id == index_num
@@ -268,14 +224,5 @@ class Control
            登録された予約はありません
 
          TEXT
-  end
-
-  def reenter_of_day(day, days_of_month)
-    until 0 < day && day <= days_of_month
-      puts "1~#{days_of_month}を入力してください"
-      printf "予約日(DD):"
-      day = gets.chomp.to_i
-    end
-    day
   end
 end
