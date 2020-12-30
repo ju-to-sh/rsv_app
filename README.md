@@ -4,6 +4,8 @@
 ## デモ
 登録する各項目は入力が必須です。 
 
+<img width="345" alt="demo" src="https://user-images.githubusercontent.com/62190302/103327831-99758680-4a99-11eb-9828-b962ac72b097.png">
+
 ## 機能
  
 - 一覧表示
